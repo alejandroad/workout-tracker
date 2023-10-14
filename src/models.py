@@ -1,17 +1,20 @@
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, Integer, ForeignKey, String
-
-from src import app
-
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///powerlifting.db'
-
-db = SQLAlchemy(app)
+from . import db
+from sqlalchemy import Column, Integer, ForeignKey, String, Enum
+from werkzeug.security import generate_password_hash, check_password_hash
 
 class User(db.Model):
     __tablename__ = 'user'
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String)
     username = Column(String, unique=True, nullable=False)
+    password_hash = Column(String, nullable=False)
+    workouts = db.relationship("Workout", backref="user")
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
     def __repr__(self):
         return "<User(name='%s')>" % (self.name)
@@ -65,7 +68,8 @@ class WorkoutExerciseAssociation(db.Model):
     repetitions = Column(Integer)
     sets = Column(Integer)
     weight = Column(Integer)
-    #unit = Column(Bool) # or maybe enums to signifiy lbs vs kg
+    WeightUnit = Enum("kg", "lbs", name="weight_unit")
+    unit = Column(WeightUnit)
 
 
 
