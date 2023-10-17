@@ -1,5 +1,6 @@
-from src import app
+from flask import current_app
 
-@app.route('/')
-def index():
-    return "Hello World"
+def init_app(app):
+    @app.route('/')
+    def index():
+        return "Hello World"
