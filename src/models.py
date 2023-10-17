@@ -48,6 +48,7 @@ class Workout(db.Model):
     __tablename__ = 'workout'
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, nullable=False)
+    user_id = Column(Integer, ForeignKey('user.id'))
     exercises = db.relationship('Exercise', secondary='workout_exercise_association', back_populates='workouts')
 
     def __repr__(self):
