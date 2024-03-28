@@ -7,5 +7,7 @@ The goal is to create a full stack powerlifting application that allows you to m
 3. pip3 install -r requirements.txt
 4. python3 run.py
 
+Currently shelfing project until further notice
+
 
 
